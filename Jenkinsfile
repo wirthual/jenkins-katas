@@ -53,7 +53,14 @@ environment {
           }
         }
         
-        stage("Push docker app"){
+        
+        }
+        
+        
+      }
+
+
+              stage("Push docker app"){
         environment {
       DOCKERCREDS = credentials('pw') //use the credentials just created in this stage
 }
@@ -63,11 +70,6 @@ steps {
       sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
       sh 'ci/push-docker.sh'
 }
-        
-        }
-        
-        
-      }
     }
 
   }
