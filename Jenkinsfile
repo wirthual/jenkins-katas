@@ -61,7 +61,7 @@ environment {
       stage('Master branch build') {
           when { branch "master" }
           steps {
-            sh 'Echo "On master branch"'
+            sh 'echo "On master branch"'
           }
         }
 
