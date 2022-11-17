@@ -1,4 +1,9 @@
 pipeline {
+
+environment {
+        docker_username = 'myusername'
+    }
+
   agent any
   stages {
     stage("clone down"){
@@ -29,6 +34,7 @@ pipeline {
           steps {
             unstash 'code'
             sh 'ci/build-app.sh'
+            stash includes: '/app/build/libs/', name: 'code'
             archiveArtifacts '/app/build/libs/'
           }
         }
@@ -46,6 +52,21 @@ pipeline {
             junit 'app/build/test-results/test/TEST-*.xml'
           }
         }
+        
+        stage("Push docker app"){
+        environment {
+      DOCKERCREDS = credentials('pw') //use the credentials just created in this stage
+}
+steps {
+      unstash 'code' //unstash the repository code
+      sh 'ci/build-docker.sh'
+      sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
+      sh 'ci/push-docker.sh'
+}
+        
+        }
+        
+        
       }
     }
 
