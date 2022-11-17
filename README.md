@@ -1,6 +1,6 @@
 # Jenkins Kata
 
-Look into the labs folder for exercises
+Look into the labs folder for exercises 
 
 ## Open in google cloud shell
 
