@@ -33,7 +33,7 @@ environment {
 
           steps {
             unstash 'code'
-            sh 'ci/build-app.sh'
+            //sh 'ci/build-app.sh'
             stash includes: '/app/build/libs/', name: 'code'
             archiveArtifacts '/app/build/libs/'
           }
@@ -55,22 +55,28 @@ environment {
         
         
         }
-        
-        
+      
       }
 
+      stage('Master branch build') {
+          when { branch "master" }
+          steps {
+            sh 'Echo "On master branch"'
+          }
+        }
 
-              stage("Push docker app"){
+
+      stage("Push docker app"){
         environment {
-      DOCKERCREDS = credentials('pw') //use the credentials just created in this stage
-}
-steps {
-      unstash 'code' //unstash the repository code
-      sh 'ci/build-docker.sh'
-      sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
-      sh 'ci/push-docker.sh'
-}
-    }
+        DOCKERCREDS = credentials('pw') //use the credentials just created in this stage
+        }
+        steps {
+              unstash 'code' //unstash the repository code
+              sh 'ci/build-docker.sh'
+              sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
+              sh 'ci/push-docker.sh'
+        }
+      }
 
   }
 }
