@@ -34,7 +34,7 @@ environment {
           steps {
             unstash 'code'
             //sh 'ci/build-app.sh'
-            stash includes: '/app/build/libs/', name: 'code'
+            //stash includes: '/app/build/libs/', name: 'code'
             archiveArtifacts '/app/build/libs/'
           }
         }
